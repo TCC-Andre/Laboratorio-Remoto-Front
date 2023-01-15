@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BiUser } from "react-icons/bi";
 
@@ -17,11 +17,6 @@ const Logo = styled.h1`
   font-size: 24px;
 `;
 
-const Title = styled.h1`
-  color: ${(props) => props.theme.colors.white};
-  font-size: 20px;
-`;
-
 const AvatarUser = styled.span`
   width: 40px;
   height: 40px;
@@ -36,7 +31,6 @@ export function Navbar() {
   return (
     <DivNavbar>
       <Logo>LabRemote</Logo>
-      <Title>Laboratório Remoto</Title>
       <AvatarUser>
         <BiUser color={"#525252"} size={25} />
       </AvatarUser>

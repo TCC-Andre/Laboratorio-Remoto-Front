@@ -4,9 +4,19 @@ import styled from "styled-components";
 import PrimaryButton from "../../shared/components/PrimaryButton/PrimaryButton";
 import Text from "../../shared/components/Text/Text";
 import Title from "../../shared/components/Title/Title";
+import { useForm } from "react-hook-form";
+import {
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const Container = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,10 +30,50 @@ const DivContent = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 40px;
-  padding-top: 50px;
+  padding-top: 40px;
+`;
+
+const DivLogin = styled.div`
+  width: 550px;
+  height: 500px;
+  background: ${(props) => props.theme.colors.white};
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 30px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+`;
+
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  margin-top: 20px;
+`;
+
+const Link = styled.a`
+  font-size: 14px;
+  font-weight: 400;
+  color: ${(props) => props.theme.colors.primary};
+  cursor: pointer;
 `;
 
 export function Home() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleShowPassword = () => setShowPassword(!showPassword);
+
+  const onSubmit = (data: any) => console.log(data);
+
   return (
     <div>
       <Container>
@@ -45,7 +95,55 @@ export function Home() {
           </Text>
         </DivContent>
         <DivContent>
-          <h1>Olá</h1>
+          <DivLogin>
+            <Title fontSize={24} fontWeight={500}>
+              Acesse sua conta
+            </Title>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <TextField
+                id="outlined-cpf"
+                label="Email"
+                {...register("email")}
+                sx={{ width: "60%", background: "#F5F4FF" }}
+              />
+              <FormControl
+                sx={{ width: "60%", background: "#F5F4FF" }}
+                variant="outlined"
+              >
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Senha
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  {...register("senha")}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      {showPassword ? (
+                        <AiFillEyeInvisible
+                          aria-label="toggle password visibility"
+                          onClick={handleShowPassword}
+                          cursor="pointer"
+                          size={20}
+                        />
+                      ) : (
+                        <AiFillEye
+                          aria-label="toggle password visibility"
+                          onClick={handleShowPassword}
+                          cursor="pointer"
+                          size={20}
+                        />
+                      )}
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+              <Link>Não possui conta? Cadastre-se</Link>
+              <Link>Esqueceu sua senha?</Link>
+              <PrimaryButton text="Entrar" />
+            </Form>
+          </DivLogin>
         </DivContent>
       </Container>
     </div>
