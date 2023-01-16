@@ -1,5 +1,4 @@
-import React from "react";
-import { Navbar } from "../../shared/components/Navbar/navbar";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import PrimaryButton from "../../shared/components/PrimaryButton/PrimaryButton";
 import Text from "../../shared/components/Text/Text";
@@ -13,6 +12,11 @@ import {
   TextField,
 } from "@mui/material";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { AuthContext } from "../../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
+
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
 const Container = styled.div`
   width: 100%;
@@ -71,8 +75,18 @@ export function Home() {
   } = useForm();
   const [showPassword, setShowPassword] = React.useState(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (data: any) => {
+    try {
+      await auth.authenticate(data.matricula, data.senha);
+
+      navigate("/alunas");
+    } catch (error) {
+      toast.error("Não foi possível entrar, verifique as credenciais!");
+    }
+  };
 
   return (
     <div>
@@ -101,9 +115,10 @@ export function Home() {
             </Title>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <TextField
-                id="outlined-cpf"
-                label="Email"
-                {...register("email")}
+                id="outlined-matricula"
+                label="Matricula"
+                required={true}
+                {...register("matricula")}
                 sx={{ width: "60%", background: "#F5F4FF" }}
               />
               <FormControl
@@ -116,6 +131,7 @@ export function Home() {
                 <OutlinedInput
                   id="outlined-adornment-password"
                   type={showPassword ? "text" : "password"}
+                  required={true}
                   {...register("senha")}
                   endAdornment={
                     <InputAdornment position="end">
@@ -146,6 +162,7 @@ export function Home() {
           </DivLogin>
         </DivContent>
       </Container>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }

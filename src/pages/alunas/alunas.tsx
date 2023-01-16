@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import Sidebar from "../../shared/components/Sidebar/sidebar";
 import DataTable from "../../shared/components/TablePagination/tablePagination";
 import PrimaryButton from "../../shared/components/PrimaryButton/PrimaryButton";
 import {
   Box,
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -17,6 +18,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { AlunasListarDTO } from "./dtos/AlunasListarDTO";
 import { AlunasCadastrarDTO } from "./dtos/AlunasCadastrarDTO";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Container = styled.div`
   width: 100%;
@@ -81,6 +83,7 @@ export function Alunas() {
     watch,
     formState: { errors },
   } = useForm();
+  const auth = useContext(AuthContext);
 
   const cadastrarAlunas = async (data: any) => {
     const aluna = {
@@ -97,32 +100,36 @@ export function Alunas() {
 
     console.log(aluna);
 
-    await axios
-      .post("https://amis-service-stg.azurewebsites.net/alunas/", aluna)
-      .then((response) => {
-        console.log(response.status);
-        handleClose();
-      })
-      .catch((err) => console.warn(err));
+    // await axios
+    // .post("https://amis-service-stg.azurewebsites.net/alunas/", aluna)
+    // .then((response) => {
+    //   console.log(response.status);
+    //   handleClose();
+    // })
+    // .catch((err) => console.warn(err));
   };
 
-  useQuery("listar_alunas", async () => {
-    const response = await axios.get(
-      "https://amis-service-stg.azurewebsites.net/alunas/"
-    );
+  // useQuery("listar_alunas", async () => {
+  //   const response = await axios.get(
+  //     "https://amis-service-stg.azurewebsites.net/alunas/"
+  //   );
 
-    const temp: AlunasListarDTO[] = [];
-    response.data.forEach((value: AlunasListarDTO) => {
-      temp.push({
-        id: value.id,
-        nome: value.nome,
-        cpf: value.cpf,
-        dNascimento: value.dNascimento,
-      });
-    });
+  //   const temp: AlunasListarDTO[] = [];
+  //   response.data.forEach((value: AlunasListarDTO) => {
+  //     temp.push({
+  //       id: value.id,
+  //       nome: value.nome,
+  //       cpf: value.cpf,
+  //       dNascimento: value.dNascimento,
+  //     });
+  //   });
 
-    setDataTable(temp);
-  });
+  //   setDataTable(temp);
+  // });
+
+  const handleLogout = () => {
+    auth.logout();
+  };
 
   const columnsTable = [
     { field: "nome", headerName: "Nome", width: 150 },
@@ -135,8 +142,8 @@ export function Alunas() {
       <Sidebar />
       <Content>
         <DivButtons>
-          <PrimaryButton text={"Cadastrar"} handleClick={handleOpen} />
-          {/* <PrimaryButton text={"Editar"} /> */}
+          <PrimaryButton text={"Cadastrar"} handleClick={handleLogout} />
+          <Button onClick={handleLogout}>Sair</Button>
         </DivButtons>
         <DataTable data={dataTable} columns={columnsTable} />
       </Content>

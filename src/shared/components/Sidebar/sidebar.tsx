@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from "react";
 import styled from "styled-components";
-import { AiOutlineHome, AiOutlineAudit } from "react-icons/ai";
+import { AiOutlineAudit } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { Link } from "react-router-dom";
@@ -11,6 +11,7 @@ const Container = styled.div`
   height: 100%;
   border: none;
   background: ${(props) => props.theme.colors.white};
+  padding-top: 10px;
 `;
 
 const SidebarItem = styled(Link)<{ isActive?: boolean }>`
@@ -40,33 +41,12 @@ const ItemText = styled.h1`
   padding-left: 10px;
 `;
 
-const Logo = styled.div`
-  width: 100%;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${(props) => props.theme.colors.primary};
-  font-weight: 600;
-`;
-
 export function Sidebar() {
   const [pathname] = useState(window.location.pathname);
 
   const sidebarData = [
     {
       id: 1,
-      name: "Visão geral",
-      path: "/",
-      icon: (
-        <AiOutlineHome
-          color={pathname === "/geral" ? "#153C7A" : "#525252"}
-          size={22}
-        />
-      ),
-    },
-    {
-      id: 2,
       name: "Alunas",
       path: "/alunas",
       icon: (
@@ -77,7 +57,7 @@ export function Sidebar() {
       ),
     },
     {
-      id: 3,
+      id: 2,
       name: "Turmas",
       path: "/turmas",
       icon: (
@@ -88,7 +68,7 @@ export function Sidebar() {
       ),
     },
     {
-      id: 4,
+      id: 3,
       name: "Relatórios",
       path: "/relatorios",
       icon: (
@@ -102,7 +82,6 @@ export function Sidebar() {
 
   return (
     <Container>
-      <Logo>AMIS</Logo>
       {sidebarData.map((itemData, index) => (
         <SidebarItem
           key={index}
