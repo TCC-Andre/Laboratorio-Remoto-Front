@@ -15,53 +15,63 @@ interface IUser {
 }
 
 interface IAuthContext extends IUser {
-  user: IUser;
-  authenticate: (matricula: string, senha: string) => Promise<void>;
+  user: IUser | null;
+  authenticate: (matricula: string, senha: string) => Promise<IUser>;
   logout: () => void;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
-const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<IUser>({});
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const userLocalStorage = getUserLocalStorage();
-
-    console.log(isAuthenticated);
-
-    if (userLocalStorage) {
-      const payload = {
-        token: userLocalStorage?.token,
-        matricula: userLocalStorage?.matricula,
-      };
-
-      setUser(payload);
-    }
-  }, []);
+const AuthProvider: React.FC = ({ children }: Props) => {
+  const [user, setUser] = useState<IUser | null>(null);
+  const [loading, setLoading] = useState(true);
 
   async function authenticate(matricula: string, senha: string) {
     const response = await LoginRequest(matricula, senha);
 
-    const payload = { token: response?.token, matricula: response?.matricula };
+    const payload = {
+      token: response?.token,
+      matricula: response?.matricula,
+    };
 
     setUser(payload);
     setUserLocalStorage(payload);
-    setIsAuthenticated(true);
+    return response;
   }
 
+  useEffect(() => {
+    async function loadUser() {
+      const userLocalStorage = await getUserLocalStorage();
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      if (userLocalStorage) {
+        setUser(userLocalStorage);
+      }
+      setLoading(false);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    loadUser();
+  }, []);
+
   function logout() {
-    setUser({});
+    setUser(null);
     setUserLocalStorage(null);
-    setIsAuthenticated(false);
   }
 
   return (
     // eslint-disable-next-line react/react-in-jsx-scope
     <AuthContext.Provider
-      value={{ user, isAuthenticated, authenticate, logout }}
+      value={{
+        user,
+        isAuthenticated: Boolean(user),
+        authenticate,
+        logout,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -1,3 +1,4 @@
+import { Backdrop, CircularProgress } from "@mui/material";
 import React, { useContext } from "react";
 import {
   BrowserRouter as Router,
@@ -19,11 +20,15 @@ export const PrivateRoute: React.FC<Props> = ({
 }) => {
   const auth = useContext(AuthContext);
 
-  if (!auth.isAuthenticated) {
-    return <Navigate to="/" />;
+  if (auth.loading) {
+    return (
+      <Backdrop open={true} sx={{ backgroundColor: "#153C7A" }}>
+        <CircularProgress size={50} sx={{ color: "#fff" }} />
+      </Backdrop>
+    );
   }
 
-  return <RouteComponent />;
+  return auth.isAuthenticated ? <RouteComponent /> : <Navigate to="/" />;
 };
 
 export default function AppRoutes() {

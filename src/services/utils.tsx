@@ -1,14 +1,37 @@
+import { ErrorResponse } from "@remix-run/router";
+import { AxiosError } from "axios";
 import { api } from "./api";
 
-export async function LoginRequest(matricula: string, senha: string) {
+export async function LoginRequest(
+  matricula: string,
+  senha: string
+): Promise<any> {
   const payload = { matricula, senha };
 
   try {
     const request = await api.post("/auth/login", payload);
 
-    const response = { token: request.data.access_token, matricula };
+    if (request.status === 201) {
+      const response = { token: request.data.access_token, matricula };
+      return response;
+    }
+  } catch (error) {
+    // console.log(error);
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+    throw new ErrorResponse(401, "Unauthorized", error);
+  }
+}
 
-    return response;
+export async function LoginRequestAdmin(matricula: string, senha: string) {
+  const payload = { matricula, senha };
+
+  try {
+    const request = await api.post("/auth/admin/login", payload);
+
+    if (request.status === 200) {
+      const response = { token: request.data.access_token, matricula };
+      return response;
+    }
   } catch (error) {
     return null;
   }

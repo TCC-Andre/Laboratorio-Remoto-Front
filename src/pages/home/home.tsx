@@ -5,6 +5,8 @@ import Text from "../../shared/components/Text/Text";
 import Title from "../../shared/components/Title/Title";
 import { useForm } from "react-hook-form";
 import {
+  Backdrop,
+  CircularProgress,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -80,9 +82,11 @@ export function Home() {
 
   const onSubmit = async (data: any) => {
     try {
-      await auth.authenticate(data.matricula, data.senha);
+      const res = await auth.authenticate(data.matricula, data.senha);
 
-      navigate("/alunas");
+      if (res.token) {
+        navigate("/alunas");
+      }
     } catch (error) {
       toast.error("Não foi possível entrar, verifique as credenciais!");
     }
