@@ -12,7 +12,11 @@ export async function LoginRequest(
     const request = await api.post("/auth/login", payload);
 
     if (request.status === 201) {
-      const response = { token: request.data.access_token, matricula };
+      const response = {
+        token: request.data.access_token,
+        matricula,
+        isAdmin: request.data.isAdmin,
+      };
       return response;
     }
   } catch (error) {

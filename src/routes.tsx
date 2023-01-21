@@ -7,7 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { AuthContext } from "./context/AuthProvider";
-import { Alunas } from "./pages/alunas/alunas";
+import { Alunos } from "./pages/alunos/alunos";
 import { Home } from "./pages/home/home";
 
 interface Props {
@@ -38,7 +38,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Home />} />
       </Routes>
       <Routes>
-        <Route path="/alunas" element={<PrivateRoute component={Alunas} />} />
+        <Route path="/alunas" element={<PrivateRoute component={Alunos} />} />
       </Routes>
     </Router>
   );

@@ -4,6 +4,7 @@ import Theme from "./styles/theme";
 import AppRoutes from "./routes";
 import { Navbar } from "./shared/components/Navbar/navbar";
 import { AuthProvider } from "./context/AuthProvider";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <ThemeProvider theme={Theme}>
         <Navbar />
         <AppRoutes />
+        <ToastContainer position="top-right" autoClose={3000} />
       </ThemeProvider>
     </AuthProvider>
   );
