@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import React, { useState } from "react";
 import styled from "styled-components";
 import { AiOutlineAudit } from "react-icons/ai";
@@ -14,7 +13,7 @@ const Container = styled.div`
   padding-top: 10px;
 `;
 
-const SidebarItem = styled(Link)<{ isActive?: boolean }>`
+const SidebarItem = styled(({ active, ...props }) => <Link {...props} />)`
   width: 200px;
   height: 60px;
   border: none;
@@ -24,13 +23,12 @@ const SidebarItem = styled(Link)<{ isActive?: boolean }>`
   cursor: pointer;
   border-radius: 5px 0 0 5px;
   text-decoration: none;
-  padding-left: ${(props) => props.isActive && "13px"};
+  padding-left: ${(props) => props.active && "13px"};
   background: ${(props) =>
-    props.isActive ? props.theme.colors.grey : props.theme.colors.white};
-  color: ${(props) =>
-    props.isActive ? props.theme.colors.primary : "#525252"};
+    props.active ? props.theme.colors.grey : props.theme.colors.white};
+  color: ${(props) => (props.active ? props.theme.colors.primary : "#525252")};
   border-left: ${(props) =>
-    props.isActive && "7px solid" + props.theme.colors.primary};
+    props.active && "7px solid" + props.theme.colors.primary};
 `;
 
 const ItemText = styled.h1`
@@ -85,8 +83,8 @@ export function Sidebar() {
       {sidebarData.map((itemData, index) => (
         <SidebarItem
           key={index}
-          isActive={pathname === itemData.path}
           to={itemData.path}
+          active={pathname === itemData.path}
         >
           {itemData.icon}
           <ItemText>{itemData.name}</ItemText>
