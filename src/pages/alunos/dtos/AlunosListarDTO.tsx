@@ -3,5 +3,5 @@ export interface AlunosListarDTO {
   nome: string;
   matricula: string;
   email: string;
-  dataCadastro: string;
+  dataCadastro?: string;
 }

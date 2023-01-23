@@ -1,3 +1,6 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react/jsx-key */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import React, { useState } from "react";
 import styled from "styled-components";
 import Sidebar from "../../shared/components/Sidebar/sidebar";
@@ -21,6 +24,9 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { AlunosTurmasListarDTO } from "./dtos/AlunosTurmasListarDTO";
 import { queryClient } from "../../services/queryClient";
+import { GridActionsCellItem, GridRowId } from "@mui/x-data-grid";
+import { BsFillTrashFill } from "react-icons/bs";
+import { AiFillEdit } from "react-icons/ai";
 
 const Container = styled.div`
   width: 100%;
@@ -72,6 +78,9 @@ const style = {
   boxShadow: 24,
   p: 4,
   padding: "50px",
+  height: "85%",
+  overflow: "hidden",
+  overflowY: "scroll",
 };
 
 export function Alunos() {
@@ -80,10 +89,14 @@ export function Alunos() {
   const handleClose = () => setOpen(false);
   const [dataTable, setDataTable] = useState(Array<Object>);
   const [turmas, setTurmas] = useState(Array<AlunosTurmasListarDTO>);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [alunoData, setAlunoData] = useState({} as AlunosListarDTO);
   const {
     register,
     handleSubmit,
     watch,
+    reset,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -116,10 +129,11 @@ export function Alunos() {
     await api
       .post("alunos/", aluno)
       .then((response) => {
+        reset();
         console.log(response.status);
         handleClose();
         toast.success("Aluno cadastrado com sucesso!");
-        void queryClient.invalidateQueries("listar_alunos");
+        queryClient.invalidateQueries("listar_alunos");
       })
       .catch((err) => {
         toast.error(err.response.data.message || "Erro ao cadastrar aluno!");
@@ -142,11 +156,79 @@ export function Alunos() {
     setTurmas(temp);
   });
 
+  const carregarAluno = async (id: any) => {
+    const response = dataTable.find((element: any) => {
+      if (element.id === id) {
+        return element;
+      }
+    });
+    const aluno = response as AlunosListarDTO;
+    setAlunoData(aluno);
+    setValue("nomeEdit", aluno.nome);
+    setValue("matriculaEdit", aluno.matricula);
+    setValue("emailEdit", aluno.email);
+    setOpenEdit(true);
+  };
+
+  const editarAluno = async (data: any) => {
+    const alunoEditado = {
+      nome: data.nomeEdit,
+      matricula: data.matriculaEdit,
+      email: data.emailEdit,
+    };
+
+    await api
+      .put("alunos/" + alunoData.id, alunoEditado)
+      .then((response) => {
+        setOpenEdit(false);
+        toast.success("Aluno editado com sucesso!");
+        queryClient.invalidateQueries("listar_alunos");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message || "Erro ao editar aluno!");
+      });
+  };
+
+  const deletarAluno = async (id: any) => {
+    await api
+      .delete("alunos/" + id)
+      .then((response) => {
+        console.log(response);
+        toast.success("Aluno excluído com sucesso!");
+        queryClient.invalidateQueries("listar_alunos");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message || "Erro ao excluir aluno!");
+      });
+  };
+
   const columnsTable = [
     { field: "nome", headerName: "Nome", width: 300 },
     { field: "matricula", headerName: "Matricula", width: 150 },
     { field: "email", headerName: "E-mail", width: 250 },
     { field: "dataCadastro", headerName: "Data de cadastro", width: 150 },
+    {
+      field: "actions",
+      type: "actions",
+      width: 80,
+      getActions: (params: { id: GridRowId }) => [
+        <GridActionsCellItem
+          icon={<BsFillTrashFill size={18} />}
+          label="Deletar"
+          onClick={() => {
+            deletarAluno(params.id);
+          }}
+        />,
+        <GridActionsCellItem
+          icon={<AiFillEdit size={20} />}
+          label="Editar"
+          onClick={async () => {
+            carregarAluno(params.id);
+            setOpenEdit(true);
+          }}
+        />,
+      ],
+    },
   ];
 
   return (
@@ -210,6 +292,35 @@ export function Alunos() {
               </Select>
             </FormControl>
             <PrimaryButton text={"Cadastrar"} />
+          </Form>
+        </Box>
+      </Modal>
+      <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
+        <Box sx={style}>
+          <FormText>Altere os dados cadastrais.</FormText>
+          <Form onSubmit={handleSubmit(editarAluno)}>
+            <TextField
+              id="outlined-nome"
+              label="Nome"
+              required={true}
+              {...register("nomeEdit")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+            />
+            <TextField
+              id="outlined-matricula"
+              label="Matricula"
+              required={true}
+              {...register("matriculaEdit")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+            />
+            <TextField
+              id="outlined-email"
+              label="E-mail"
+              required={true}
+              {...register("emailEdit")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+            />
+            <PrimaryButton text={"Editar"} />
           </Form>
         </Box>
       </Modal>

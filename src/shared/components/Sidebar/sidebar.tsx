@@ -45,8 +45,8 @@ export function Sidebar() {
   const sidebarData = [
     {
       id: 1,
-      name: "Alunas",
-      path: "/alunas",
+      name: "Alunos",
+      path: "/alunos",
       icon: (
         <BiUser
           color={pathname === "/alunas" ? "#153C7A" : "#525252"}
