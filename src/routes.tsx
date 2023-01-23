@@ -38,7 +38,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Home />} />
       </Routes>
       <Routes>
-        <Route path="/alunas" element={<PrivateRoute component={Alunos} />} />
+        <Route path="/alunos" element={<PrivateRoute component={Alunos} />} />
       </Routes>
     </Router>
   );
