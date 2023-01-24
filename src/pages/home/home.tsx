@@ -5,8 +5,6 @@ import Text from "../../shared/components/Text/Text";
 import Title from "../../shared/components/Title/Title";
 import { useForm } from "react-hook-form";
 import {
-  Backdrop,
-  CircularProgress,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -18,7 +16,7 @@ import { AuthContext } from "../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   width: 100%;
@@ -85,7 +83,7 @@ export function Home() {
       const res = await auth.authenticate(data.matricula, data.senha);
 
       if (res.token) {
-        navigate("/alunas");
+        navigate("/alunos");
       }
     } catch (error) {
       toast.error("Não foi possível entrar, verifique as credenciais!");
