@@ -1,6 +1,5 @@
 import { ErrorResponse } from "@remix-run/router";
-import { AxiosError } from "axios";
-import { api } from "./api";
+import { api } from "./api/api";
 
 export async function LoginRequest(
   matricula: string,
