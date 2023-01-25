@@ -242,7 +242,7 @@ export function Turmas() {
           <Title fontSize={32} fontWeight={600}>
             Turmas
           </Title>
-          <PrimaryButton text={"Cadastrar"} handleClick={handleOpen} />
+          <PrimaryButton handleClick={handleOpen}>Cadastrar</PrimaryButton>
         </DivButtons>
         <DataTable data={dataTable} columns={columnsTable} />
       </Content>
@@ -283,7 +283,7 @@ export function Turmas() {
                 ))}
               </Select>
             </FormControl>
-            <PrimaryButton text={"Cadastrar"} />
+            <PrimaryButton>Cadastrar</PrimaryButton>
           </Form>
         </Box>
       </Modal>
@@ -305,7 +305,7 @@ export function Turmas() {
               {...register("codigoEdit")}
               sx={{ width: "100%", background: "#F5F4FF" }}
             />
-            <PrimaryButton text={"Editar"} />
+            <PrimaryButton>Editar</PrimaryButton>
           </Form>
         </Box>
       </Modal>

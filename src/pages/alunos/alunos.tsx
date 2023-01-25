@@ -241,7 +241,7 @@ export function Alunos() {
           <Title fontSize={32} fontWeight={600}>
             Alunos
           </Title>
-          <PrimaryButton text={"Cadastrar"} handleClick={handleOpen} />
+          <PrimaryButton handleClick={handleOpen}>Cadastrar</PrimaryButton>
         </DivButtons>
         <DataTable data={dataTable} columns={columnsTable} />
       </Content>
@@ -296,7 +296,7 @@ export function Alunos() {
                 ))}
               </Select>
             </FormControl>
-            <PrimaryButton text={"Cadastrar"} />
+            <PrimaryButton>Cadastrar</PrimaryButton>
           </Form>
         </Box>
       </Modal>
@@ -325,7 +325,7 @@ export function Alunos() {
               {...register("emailEdit")}
               sx={{ width: "100%", background: "#F5F4FF" }}
             />
-            <PrimaryButton text={"Editar"} />
+            <PrimaryButton>Editar</PrimaryButton>
           </Form>
         </Box>
       </Modal>

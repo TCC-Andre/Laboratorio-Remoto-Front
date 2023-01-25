@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { AiOutlineAudit, AiOutlineExperiment } from "react-icons/ai";
+import {
+  AiOutlineAudit,
+  AiOutlineExperiment,
+  AiOutlineHome,
+} from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
@@ -44,6 +48,17 @@ export function Sidebar() {
   const sidebarData = [
     {
       id: 1,
+      name: "Início",
+      path: "/inicio",
+      icon: (
+        <AiOutlineHome
+          color={pathname === "/inicio" ? "#153C7A" : "#525252"}
+          size={22}
+        />
+      ),
+    },
+    {
+      id: 2,
       name: "Alunos",
       path: "/alunos",
       icon: (
@@ -54,7 +69,7 @@ export function Sidebar() {
       ),
     },
     {
-      id: 2,
+      id: 3,
       name: "Turmas",
       path: "/turmas",
       icon: (
@@ -65,7 +80,7 @@ export function Sidebar() {
       ),
     },
     {
-      id: 3,
+      id: 4,
       name: "Experimentos",
       path: "/experimentos",
       icon: (

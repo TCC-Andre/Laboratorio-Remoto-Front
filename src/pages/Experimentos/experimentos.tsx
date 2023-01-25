@@ -116,7 +116,7 @@ export function Experimentos() {
     const response = await api.get("experimentos/");
 
     const temp: ExperimentosListarDTO[] = [];
-    response.data.forEach((value: ExperimentosListarDTO) => {
+    response.data.forEach((value: ExperimentosListarDTO) =>
       temp.push({
         id: value.id,
         nome: value.nome,
@@ -124,8 +124,9 @@ export function Experimentos() {
         duracao: value.duracao,
         status: value.status,
         dataCadastro: dayjs(value.dataCadastro).format("DD/MM/YYYY"),
-      });
-    });
+        imagem: value.imagem,
+      })
+    );
 
     setDataTable(temp);
   };
@@ -270,7 +271,7 @@ export function Experimentos() {
           <Title fontSize={32} fontWeight={600}>
             Experimentos
           </Title>
-          <PrimaryButton text={"Cadastrar"} handleClick={handleOpen} />
+          <PrimaryButton handleClick={handleOpen}>Cadastrar</PrimaryButton>
         </DivButtons>
         <DataTable data={dataTable} columns={columnsTable} />
       </Content>
@@ -347,7 +348,7 @@ export function Experimentos() {
                 ))}
               </FormGroup>
             </Box>
-            <PrimaryButton text={"Cadastrar"} />
+            <PrimaryButton>Cadastrar</PrimaryButton>
           </Form>
         </Box>
       </Modal>
@@ -390,7 +391,7 @@ export function Experimentos() {
                 <MenuItem value={false as any}>Desativado</MenuItem>
               </Select>
             </FormControl>
-            <PrimaryButton text={"Editar"} />
+            <PrimaryButton>Editar</PrimaryButton>
           </Form>
         </Box>
       </Modal>

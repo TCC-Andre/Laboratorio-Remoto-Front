@@ -159,7 +159,7 @@ export function Home() {
               </FormControl>
               <Link>Não possui conta? Cadastre-se</Link>
               <Link>Esqueceu sua senha?</Link>
-              <PrimaryButton text="Entrar" />
+              <PrimaryButton>Entrar</PrimaryButton>
             </Form>
           </DivLogin>
         </DivContent>
