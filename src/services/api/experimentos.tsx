@@ -3,10 +3,15 @@ import { ExperimentoCadastrarDTO } from "../../pages/Experimentos/dtos/Experimen
 import { api } from "./api";
 
 export const cadastrarExperimentoApi = async (
-  experimento: ExperimentoCadastrarDTO
+  experimento: ExperimentoCadastrarDTO,
+  formData: FormData
 ) => {
   return await api
-    .post("/experimentos", experimento)
+    .post("/experimentos", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
     .then((response) => response);
 };
 

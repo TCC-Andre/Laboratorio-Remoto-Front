@@ -4,4 +4,5 @@ export interface ExperimentoCadastrarDTO {
   duracao: number;
   status: boolean;
   turma: Array<{}>;
+  file: FormData;
 }

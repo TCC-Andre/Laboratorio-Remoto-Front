@@ -107,7 +107,6 @@ export function Experimentos() {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     setValue,
     formState: { errors },
@@ -140,16 +139,22 @@ export function Experimentos() {
       turma: data.turmas,
     } as ExperimentoCadastrarDTO;
 
-    console.log(experimento);
+    if (experimento.turma) {
+      const turmas = experimento.turma.map((value: any) => {
+        return { id: value };
+      });
+      experimento.turma = turmas;
+    }
 
-    const turmas = experimento.turma.map((value: any) => {
-      return { id: value };
-    });
+    const formData = new FormData();
+    formData.append("file", data.imagem[0]);
+    formData.append("nome", experimento.nome);
+    formData.append("descricao", experimento.descricao);
+    formData.append("duracao", experimento.duracao.toString());
+    formData.append("status", experimento.status.toString());
+    formData.append("turma", JSON.stringify(experimento.turma));
 
-    experimento.turma = turmas;
-    console.log(experimento);
-
-    const response = await cadastrarExperimentoApi(experimento);
+    const response = await cadastrarExperimentoApi(experimento, formData);
 
     if (response.status === 201) {
       reset();
@@ -296,6 +301,14 @@ export function Experimentos() {
               {...register("duracao")}
               sx={{ width: "100%", background: "#F5F4FF" }}
             />
+            <TextField
+              id="outlined-imagem"
+              type={"file"}
+              {...register("imagem")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+              InputLabelProps={{ shrink: false }}
+            />
+
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Status</InputLabel>
               <Select
