@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { AuthContext } from "./context/AuthProvider";
 import { Alunos } from "./pages/Alunos/alunos";
+import { Experimentos } from "./pages/Experimentos/experimentos";
 import { Home } from "./pages/Home/home";
 import { Turmas } from "./pages/Turmas/turmas";
 
@@ -43,6 +44,12 @@ export default function AppRoutes() {
       </Routes>
       <Routes>
         <Route path="/turmas" element={<PrivateRoute component={Turmas} />} />
+      </Routes>
+      <Routes>
+        <Route
+          path="/Experimentos"
+          element={<PrivateRoute component={Experimentos} />}
+        />
       </Routes>
     </Router>
   );

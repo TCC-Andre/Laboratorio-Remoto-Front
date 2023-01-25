@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { AiOutlineAudit } from "react-icons/ai";
+import { AiOutlineAudit, AiOutlineExperiment } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
-import { HiOutlineDocumentReport } from "react-icons/hi";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
@@ -67,10 +66,10 @@ export function Sidebar() {
     },
     {
       id: 3,
-      name: "Relatórios",
-      path: "/relatorios",
+      name: "Experimentos",
+      path: "/experimentos",
       icon: (
-        <HiOutlineDocumentReport
+        <AiOutlineExperiment
           color={pathname === "/relatorios" ? "#153C7A" : "#525252"}
           size={22}
         />
