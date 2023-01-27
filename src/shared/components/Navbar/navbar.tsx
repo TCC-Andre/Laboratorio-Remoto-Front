@@ -35,6 +35,7 @@ export function Navbar() {
   const open = Boolean(anchorEl);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const [pathname, setPath] = useState(window.location.pathname);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -44,19 +45,36 @@ export function Navbar() {
     setAnchorEl(null);
   };
 
+  useEffect(() => {
+    setPath(window.location.pathname);
+  }, [window.location.pathname]);
+
   const logout = () => {
     auth.logout();
+    navigate("/");
   };
 
   return (
     <DivNavbar>
       <Logo>LabRemote</Logo>
       <div>
+        {auth.isAuthenticated && (
+          <Button
+            onClick={() => navigate("/experimentos")}
+            variant="text"
+            sx={{ color: pathname === "/experimentos" ? "#ffbb18" : "white" }}
+          >
+            Experimentos
+          </Button>
+        )}
         {auth.user?.isAdmin && (
           <Button
-            onClick={() => navigate("/alunos")}
+            onClick={() => navigate("/gerenciar/alunos")}
             variant="text"
-            sx={{ color: "white" }}
+            sx={{
+              color:
+                pathname.slice(0, 10) === "/gerenciar" ? "#ffbb18" : "white",
+            }}
           >
             Gerenciar
           </Button>

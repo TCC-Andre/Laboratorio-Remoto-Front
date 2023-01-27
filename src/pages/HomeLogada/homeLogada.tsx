@@ -1,25 +1,21 @@
 /* eslint-disable react/jsx-key */
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PrimaryButton from "../../shared/components/PrimaryButton/PrimaryButton";
 import Text from "../../shared/components/Text/Text";
-import Title from "../../shared/components/Title/Title";
-import { useForm } from "react-hook-form";
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
-  Typography,
+  CircularProgress,
 } from "@mui/material";
 
 import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
 import { ExperimentosListarDTO } from "../Experimentos/dtos/ExperimentosListarDTO";
 import { api } from "../../services/api/api";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -29,15 +25,6 @@ const Container = styled.div`
   align-items: center;
   padding: 2% 4%;
   gap: 2%;
-`;
-
-const DivContent = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 40px;
-  padding-top: 40px;
 `;
 
 const DivCards = styled.div`
@@ -51,8 +38,18 @@ const DivCards = styled.div`
   flex-wrap: wrap;
 `;
 
+const DivLoading = styled.div`
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export function HomeLogada(props: any) {
   const [experimentos, setExperimentos] = useState<ExperimentosListarDTO[]>();
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const listarExperimentos = async () => {
     const response = await api.get("experimentos/");
@@ -68,6 +65,7 @@ export function HomeLogada(props: any) {
       };
     });
 
+    setLoading(false);
     setExperimentos(experimentos);
   };
 
@@ -87,45 +85,63 @@ export function HomeLogada(props: any) {
     <div>
       <Container>
         <DivCards>
-          {experimentos?.map((experimento: ExperimentosListarDTO, index) => {
-            return (
-              <Card
-                sx={{ maxWidth: 400, minWidth: 400, paddingBottom: "15px" }}
-              >
-                <CardMedia
-                  component="img"
-                  height="250"
-                  image={
-                    "data:image/jpeg;base64," +
-                    arrayBufferToBase64(experimento.imagem.data)
-                  }
-                  alt="green iguana"
-                  key={index}
-                />
-                <CardContent>
-                  <Text fontSize={24} fontWeight={500} color="#283750">
-                    {experimento.nome}
-                  </Text>
-                  <Text
-                    fontSize={15}
-                    fontWeight={400}
-                    color="grey"
-                    marginTop="5px"
-                  >
-                    {experimento.descricao}
-                  </Text>
-                </CardContent>
-                <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-                  <PrimaryButton width="150px" height="45px" fontSize="16px">
-                    Acessar
-                  </PrimaryButton>
-                  <PrimaryButton width="150px" height="45px" fontSize="16px">
-                    Agendar
-                  </PrimaryButton>
-                </CardActions>
-              </Card>
-            );
-          })}
+          {!loading ? (
+            <>
+              {experimentos?.map(
+                (experimento: ExperimentosListarDTO, index) => {
+                  return (
+                    <Card
+                      sx={{
+                        maxWidth: 400,
+                        minWidth: 400,
+                        paddingBottom: "5px",
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        height="250"
+                        image={
+                          "data:image/jpeg;base64," +
+                          arrayBufferToBase64(experimento.imagem.data)
+                        }
+                        alt="green iguana"
+                        key={index}
+                      />
+                      <CardContent>
+                        <Text fontSize={24} fontWeight={500} color="#283750">
+                          {experimento.nome}
+                        </Text>
+                        <Text
+                          fontSize={15}
+                          fontWeight={400}
+                          color="grey"
+                          marginTop="5px"
+                        >
+                          {experimento.descricao}
+                        </Text>
+                      </CardContent>
+                      <CardActions
+                        sx={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <PrimaryButton
+                          width="150px"
+                          height="45px"
+                          fontSize="16px"
+                          handleClick={() => navigate(experimento.id)}
+                        >
+                          Acessar
+                        </PrimaryButton>
+                      </CardActions>
+                    </Card>
+                  );
+                }
+              )}
+            </>
+          ) : (
+            <DivLoading>
+              <CircularProgress size={50} sx={{ color: "#153C7A" }} />
+            </DivLoading>
+          )}
         </DivCards>
       </Container>
     </div>

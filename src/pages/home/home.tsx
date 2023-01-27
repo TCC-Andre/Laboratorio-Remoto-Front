@@ -83,7 +83,7 @@ export function Home() {
       const res = await auth.authenticate(data.matricula, data.senha);
 
       if (res.token) {
-        navigate("/alunos");
+        navigate("/experimentos");
       }
     } catch (error) {
       toast.error("Não foi possível entrar, verifique as credenciais!");

@@ -48,44 +48,33 @@ export function Sidebar() {
   const sidebarData = [
     {
       id: 1,
-      name: "Início",
-      path: "/inicio",
+      name: "Alunos",
+      path: "/gerenciar/alunos",
       icon: (
-        <AiOutlineHome
-          color={pathname === "/inicio" ? "#153C7A" : "#525252"}
+        <BiUser
+          color={pathname === "/gerenciar/alunas" ? "#153C7A" : "#525252"}
           size={22}
         />
       ),
     },
     {
       id: 2,
-      name: "Alunos",
-      path: "/alunos",
+      name: "Turmas",
+      path: "/gerenciar/turmas",
       icon: (
-        <BiUser
-          color={pathname === "/alunas" ? "#153C7A" : "#525252"}
+        <AiOutlineAudit
+          color={pathname === "/gerenciar/turmas" ? "#153C7A" : "#525252"}
           size={22}
         />
       ),
     },
     {
       id: 3,
-      name: "Turmas",
-      path: "/turmas",
-      icon: (
-        <AiOutlineAudit
-          color={pathname === "/turmas" ? "#153C7A" : "#525252"}
-          size={22}
-        />
-      ),
-    },
-    {
-      id: 4,
       name: "Experimentos",
-      path: "/experimentos",
+      path: "/gerenciar/experimentos",
       icon: (
         <AiOutlineExperiment
-          color={pathname === "/relatorios" ? "#153C7A" : "#525252"}
+          color={pathname === "/gerenciar/experimentos" ? "#153C7A" : "#525252"}
           size={22}
         />
       ),
