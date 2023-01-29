@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable react/jsx-key */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import PrimaryButton from "../../shared/components/PrimaryButton/PrimaryButton";
 import Text from "../../shared/components/Text/Text";
@@ -17,6 +18,8 @@ import { api } from "../../services/api/api";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { arrayBufferToBase64 } from "../../services/utils";
+import { consultarExperimentosPorAlunoApi } from "../../services/api/aluno";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Container = styled.div`
   width: 100%;
@@ -51,9 +54,10 @@ export function HomeLogada(props: any) {
   const [experimentos, setExperimentos] = useState<ExperimentosListarDTO[]>();
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const auth = useContext(AuthContext);
 
   const listarExperimentos = async () => {
-    const response = await api.get("experimentos/");
+    const response = await consultarExperimentosPorAlunoApi(auth.user?.id!);
 
     const experimentos = response.data.map((value: ExperimentosListarDTO) => {
       return {
@@ -78,54 +82,67 @@ export function HomeLogada(props: any) {
         <DivCards>
           {!loading ? (
             <>
-              {experimentos?.map(
-                (experimento: ExperimentosListarDTO, index) => {
-                  return (
-                    <Card
-                      sx={{
-                        maxWidth: 400,
-                        minWidth: 400,
-                        paddingBottom: "5px",
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        height="250"
-                        image={
-                          "data:image/jpeg;base64," +
-                          arrayBufferToBase64(experimento.imagem.data)
-                        }
-                        alt="green iguana"
-                        key={index}
-                      />
-                      <CardContent>
-                        <Text fontSize={24} fontWeight={500} color="#283750">
-                          {experimento.nome}
-                        </Text>
-                        <Text
-                          fontSize={15}
-                          fontWeight={400}
-                          color="grey"
-                          marginTop="5px"
+              {experimentos?.length === 0 ? (
+                <Text fontSize={24} fontWeight={500} color="#283750">
+                  Você ainda não possui experimentos cadastrados.
+                </Text>
+              ) : (
+                <>
+                  {experimentos?.map(
+                    (experimento: ExperimentosListarDTO, index) => {
+                      return (
+                        <Card
+                          key={index}
+                          sx={{
+                            maxWidth: 400,
+                            minWidth: 400,
+                            paddingBottom: "5px",
+                          }}
                         >
-                          {experimento.descricao}
-                        </Text>
-                      </CardContent>
-                      <CardActions
-                        sx={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <PrimaryButton
-                          width="130px"
-                          height="40px"
-                          fontSize="14px"
-                          handleClick={() => navigate(experimento.id)}
-                        >
-                          ACESSAR
-                        </PrimaryButton>
-                      </CardActions>
-                    </Card>
-                  );
-                }
+                          <CardMedia
+                            component="img"
+                            height="250"
+                            image={
+                              "data:image/jpeg;base64," +
+                              arrayBufferToBase64(experimento.imagem.data)
+                            }
+                            alt="green iguana"
+                            key={index}
+                          />
+                          <CardContent>
+                            <Text
+                              fontSize={24}
+                              fontWeight={500}
+                              color="#283750"
+                            >
+                              {experimento.nome}
+                            </Text>
+                            <Text
+                              fontSize={15}
+                              fontWeight={400}
+                              color="grey"
+                              marginTop="5px"
+                            >
+                              {experimento.descricao}
+                            </Text>
+                          </CardContent>
+                          <CardActions
+                            sx={{ display: "flex", justifyContent: "center" }}
+                          >
+                            <PrimaryButton
+                              width="130px"
+                              height="40px"
+                              fontSize="14px"
+                              handleClick={() => navigate(experimento.id)}
+                            >
+                              ACESSAR
+                            </PrimaryButton>
+                          </CardActions>
+                        </Card>
+                      );
+                    }
+                  )}
+                </>
               )}
             </>
           ) : (

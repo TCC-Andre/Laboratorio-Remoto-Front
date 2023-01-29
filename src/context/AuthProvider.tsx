@@ -13,6 +13,7 @@ interface IUser {
   matricula?: string;
   token?: string;
   isAdmin?: boolean;
+  id?: string;
 }
 
 interface IAuthContext extends IUser {
@@ -32,12 +33,11 @@ const AuthProvider: React.FC = ({ children }: Props) => {
   async function authenticate(matricula: string, senha: string) {
     const response = await LoginRequest(matricula, senha);
 
-    console.log(response);
-
     const payload = {
       token: response?.token,
       matricula: response?.matricula,
       isAdmin: response?.isAdmin,
+      id: response?.id,
     };
 
     setUser(payload);

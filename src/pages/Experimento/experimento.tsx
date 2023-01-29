@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { consultarExperimentoApi } from "../../services/api/experimentos";
 import { ExperimentosListarDTO } from "../GerenciarExperimentos/dtos/ExperimentosListarDTO";
 import { Button, CardMedia, Grid, Paper } from "@mui/material";
@@ -37,11 +37,10 @@ export function Experimento() {
   const [experimento, setExperimento] = useState<ExperimentosListarDTO | null>(
     null
   );
+  const navigate = useNavigate();
 
   const consultarExperimento = async () => {
     const response = await consultarExperimentoApi(id!);
-
-    console.log(response.data.imagem.data);
 
     if (response.status === 200) {
       setExperimento(response.data);
@@ -61,10 +60,16 @@ export function Experimento() {
               {experimento?.nome}
             </Title>
             <DivButton>
-              <PrimaryButton width="120px" height="40px" fontSize="14px">
+              <PrimaryButton
+                handleClick={() => navigate("dashboard")}
+                width="120px"
+                height="40px"
+                fontSize="14px"
+              >
                 ACESSAR
               </PrimaryButton>
               <Button
+                onClick={() => navigate("agendamento")}
                 variant="contained"
                 endIcon={<SlCalender color="#ffbb18" />}
                 sx={{

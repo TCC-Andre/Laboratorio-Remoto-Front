@@ -14,6 +14,8 @@ import { Home } from "./pages/Home/home";
 import { HomeLogada } from "./pages/HomeLogada/homeLogada";
 import { GerenciarTurmas } from "./pages/GerenciarTurmas/gerenciarTurmas";
 import { Navbar } from "./shared/components/Navbar/navbar";
+import { Dashboard } from "./pages/Experimento/Dashboard/dashboard";
+import { Agendamento } from "./pages/Experimento/Agendamento/agendamento";
 interface Props {
   component: React.ComponentType;
   path?: string;
@@ -68,6 +70,14 @@ export default function AppRoutes() {
         <Route
           path="/experimentos/:id"
           element={<PrivateRoute component={Experimento} />}
+        />
+        <Route
+          path="/experimentos/:id/dashboard"
+          element={<PrivateRoute component={Dashboard} />}
+        />
+        <Route
+          path="/experimentos/:id/agendamento"
+          element={<PrivateRoute component={Agendamento} />}
         />
         <Route
           path="/gerenciar/alunos"

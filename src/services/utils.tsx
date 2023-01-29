@@ -15,6 +15,7 @@ export async function LoginRequest(
         token: request.data.access_token,
         matricula,
         isAdmin: request.data.isAdmin,
+        id: request.data.id,
       };
       return response;
     }
