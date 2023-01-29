@@ -5,6 +5,7 @@ interface TextProps {
   fontWeight: number;
   color?: string;
   marginTop?: string;
+  marginBottom?: string;
 }
 
 const Text = styled.h1<TextProps>`
@@ -12,6 +13,7 @@ const Text = styled.h1<TextProps>`
   font-weight: ${(props) => props.fontWeight};
   color: ${(props) => (props.color ? props.color : props.theme.colors.black)};
   margin-top: ${(props) => props.marginTop};
+  margin-bottom: ${(props) => props.marginBottom};
 `;
 
 export default Text;

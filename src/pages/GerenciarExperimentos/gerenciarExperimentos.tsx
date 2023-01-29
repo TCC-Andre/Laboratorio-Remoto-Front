@@ -31,7 +31,7 @@ import { GridActionsCellItem, GridRowId } from "@mui/x-data-grid";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
 import Title from "../../shared/components/Title/Title";
-import { AlunosTurmasListarDTO } from "../Alunos/dtos/AlunosTurmasListarDTO";
+import { AlunosTurmasListarDTO } from "../GerenciarAlunos/dtos/AlunosTurmasListarDTO";
 import {
   cadastrarExperimentoApi,
   deletarExperimentoApi,
@@ -94,7 +94,7 @@ const style = {
   overflowY: "scroll",
 };
 
-export function Experimentos() {
+export function GerenciarExperimentos() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -271,7 +271,7 @@ export function Experimentos() {
           <Title fontSize={32} fontWeight={600}>
             Experimentos
           </Title>
-          <PrimaryButton handleClick={handleOpen}>Cadastrar</PrimaryButton>
+          <PrimaryButton handleClick={handleOpen}>CADASTRAR</PrimaryButton>
         </DivButtons>
         <DataTable data={dataTable} columns={columnsTable} />
       </Content>
@@ -348,7 +348,7 @@ export function Experimentos() {
                 ))}
               </FormGroup>
             </Box>
-            <PrimaryButton>Cadastrar</PrimaryButton>
+            <PrimaryButton>CADASTRAR</PrimaryButton>
           </Form>
         </Box>
       </Modal>

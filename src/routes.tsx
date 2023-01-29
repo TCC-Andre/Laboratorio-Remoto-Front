@@ -7,12 +7,12 @@ import {
   Navigate,
 } from "react-router-dom";
 import { AuthContext } from "./context/AuthProvider";
-import { Alunos } from "./pages/Alunos/alunos";
+import { GerenciarAlunos } from "./pages/GerenciarAlunos/gerenciarAlunos";
 import { Experimento } from "./pages/Experimento/experimento";
-import { Experimentos } from "./pages/Experimentos/experimentos";
+import { GerenciarExperimentos } from "./pages/GerenciarExperimentos/gerenciarExperimentos";
 import { Home } from "./pages/Home/home";
 import { HomeLogada } from "./pages/HomeLogada/homeLogada";
-import { Turmas } from "./pages/Turmas/turmas";
+import { GerenciarTurmas } from "./pages/GerenciarTurmas/gerenciarTurmas";
 import { Navbar } from "./shared/components/Navbar/navbar";
 interface Props {
   component: React.ComponentType;
@@ -71,15 +71,15 @@ export default function AppRoutes() {
         />
         <Route
           path="/gerenciar/alunos"
-          element={<AdminRoute component={Alunos} />}
+          element={<AdminRoute component={GerenciarAlunos} />}
         />
         <Route
           path="/gerenciar/turmas"
-          element={<AdminRoute component={Turmas} />}
+          element={<AdminRoute component={GerenciarTurmas} />}
         />
         <Route
           path="/gerenciar/experimentos"
-          element={<AdminRoute component={Experimentos} />}
+          element={<AdminRoute component={GerenciarExperimentos} />}
         />
         <Route
           path="*"

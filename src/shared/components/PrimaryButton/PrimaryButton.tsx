@@ -12,10 +12,10 @@ interface ButtonProps {
 }
 
 const Button = styled.button<ButtonProps>`
-  font-size: 18px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 500;
   width: auto;
-  min-width: 150px;
+  min-width: 130px;
   height: 50px;
   border-radius: 12px;
   border: none;
@@ -24,7 +24,7 @@ const Button = styled.button<ButtonProps>`
   color: ${(props) => props.theme.colors.white};
   background: ${(props) => props.theme.colors.primary};
   &:hover {
-    background-color: #4362ab;
+    background-color: #1565c0;
   }
 `;
 

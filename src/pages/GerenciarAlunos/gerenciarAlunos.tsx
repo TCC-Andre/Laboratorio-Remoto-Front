@@ -17,22 +17,17 @@ import {
 } from "@mui/material";
 import { useQuery } from "react-query";
 import { useForm } from "react-hook-form";
-import { Professor, TurmasListarDTO } from "./dtos/TurmasListarDTO";
-import { TurmasCadastrarDTO } from "./dtos/TurmasCadastrarDTO";
+import { AlunosListarDTO } from "./dtos/AlunosListarDTO";
+import { AlunosCadastrarDTO } from "./dtos/AlunosCadastrarDTO";
 import { api } from "../../services/api/api";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import { TurmasListarProfessoresDTO } from "./dtos/TurmasListarProfessoresDTO";
+import { AlunosTurmasListarDTO } from "./dtos/AlunosTurmasListarDTO";
 import { queryClient } from "../../services/queryClient";
 import { GridActionsCellItem, GridRowId } from "@mui/x-data-grid";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiFillEdit } from "react-icons/ai";
 import Title from "../../shared/components/Title/Title";
-import {
-  cadastrarTurmaApi,
-  deletarTurmaApi,
-  editarTurmaApi,
-} from "../../services/api/turmas";
 
 const Container = styled.div`
   width: 100%;
@@ -90,16 +85,14 @@ const style = {
   overflowY: "scroll",
 };
 
-export function Turmas() {
+export function GerenciarAlunos() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [dataTable, setDataTable] = useState(Array<Object>);
-  const [professores, setProfessores] = useState(
-    Array<TurmasListarProfessoresDTO>
-  );
+  const [turmas, setTurmas] = useState(Array<AlunosTurmasListarDTO>);
   const [openEdit, setOpenEdit] = useState(false);
-  const [turmaData, setTurmaData] = useState({} as TurmasListarDTO);
+  const [alunoData, setAlunoData] = useState({} as AlunosListarDTO);
   const {
     register,
     handleSubmit,
@@ -109,17 +102,16 @@ export function Turmas() {
     formState: { errors },
   } = useForm();
 
-  const listarTurmas = async () => {
-    const response = await api.get("turmas/");
+  const listarAlunos = async () => {
+    const response = await api.get("alunos/");
 
-    const temp: TurmasListarDTO[] = [];
-    response.data.forEach((value: TurmasListarDTO) => {
-      const prof = value.professor as unknown as Professor;
+    const temp: AlunosListarDTO[] = [];
+    response.data.forEach((value: AlunosListarDTO) => {
       temp.push({
         id: value.id,
         nome: value.nome,
-        codigo: value.codigo,
-        professor: prof.nome,
+        matricula: value.matricula,
+        email: value.email,
         dataCadastro: dayjs(value.dataCadastro).format("DD/MM/YYYY"),
       });
     });
@@ -127,88 +119,95 @@ export function Turmas() {
     setDataTable(temp);
   };
 
-  const cadastrarTurma = async (data: any) => {
-    const turma = {
+  const cadastrarAlunos = async (data: any) => {
+    const aluno = {
       nome: data.nome,
-      codigo: data.codigo,
-      professorId: data.professor,
-    } as TurmasCadastrarDTO;
+      matricula: data.matricula,
+      email: data.email,
+      senha: data.senha,
+      turma: data.turma,
+    } as AlunosCadastrarDTO;
 
-    const response = await cadastrarTurmaApi(turma);
-
-    if (response.status === 201) {
-      reset();
-      console.log(response.status);
-      handleClose();
-      toast.success("Turma cadastrada com sucesso!");
-      queryClient.invalidateQueries("listar_turmas");
-    } else {
-      toast.error(response.data.message || "Erro ao cadastrar turma!");
-    }
+    await api
+      .post("alunos/", aluno)
+      .then((response) => {
+        reset();
+        console.log(response.status);
+        handleClose();
+        toast.success("Aluno cadastrado com sucesso!");
+        queryClient.invalidateQueries("listar_alunos");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message || "Erro ao cadastrar aluno!");
+      });
   };
 
-  useQuery("listar_turmas", listarTurmas);
+  useQuery("listar_alunos", listarAlunos);
 
-  useQuery("listar_professores", async () => {
-    const response = await api.get("professores/");
+  useQuery("listar_turmas", async () => {
+    const response = await api.get("turmas/");
 
-    const temp: TurmasListarProfessoresDTO[] = [];
-    response.data.forEach((value: TurmasListarProfessoresDTO) => {
+    const temp: AlunosTurmasListarDTO[] = [];
+    response.data.forEach((value: AlunosTurmasListarDTO) => {
       temp.push({
         id: value.id,
         nome: value.nome,
-        matricula: value.matricula,
+        codigo: value.codigo,
       });
     });
-    setProfessores(temp);
+    setTurmas(temp);
   });
 
-  const carregarTurma = async (id: any) => {
+  const carregarAluno = async (id: any) => {
     const response = dataTable.find((element: any) => {
       if (element.id === id) {
         return element;
       }
     });
-    const aluno = response as TurmasListarDTO;
-    setTurmaData(aluno);
+    const aluno = response as AlunosListarDTO;
+    setAlunoData(aluno);
     setValue("nomeEdit", aluno.nome);
-    setValue("codigoEdit", aluno.codigo);
+    setValue("matriculaEdit", aluno.matricula);
+    setValue("emailEdit", aluno.email);
     setOpenEdit(true);
   };
 
-  const editarTurma = async (data: any) => {
-    const turmaEditada = {
+  const editarAluno = async (data: any) => {
+    const alunoEditado = {
       nome: data.nomeEdit,
-      codigo: data.codigoEdit,
+      matricula: data.matriculaEdit,
+      email: data.emailEdit,
     };
 
-    const response = await editarTurmaApi(turmaData.id, turmaEditada);
-
-    if (response.status === 200) {
-      setOpenEdit(false);
-      toast.success("Turma editada com sucesso!");
-      queryClient.invalidateQueries("listar_turmas");
-    } else {
-      toast.error(response.data.message || "Erro ao editar turma!");
-    }
+    await api
+      .put("alunos/" + alunoData.id, alunoEditado)
+      .then((response) => {
+        setOpenEdit(false);
+        toast.success("Aluno editado com sucesso!");
+        queryClient.invalidateQueries("listar_alunos");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message || "Erro ao editar aluno!");
+      });
   };
 
-  const deletarTurma = async (id: any) => {
-    const response = await deletarTurmaApi(id);
-
-    if (response.status === 200) {
-      console.log(response);
-      toast.success("Turma excluída com sucesso!");
-      queryClient.invalidateQueries("listar_turmas");
-    } else {
-      toast.error(response.data.message || "Erro ao excluir turma!");
-    }
+  const deletarAluno = async (id: any) => {
+    await api
+      .delete("alunos/" + id)
+      .then((response) => {
+        console.log(response);
+        toast.success("Aluno excluído com sucesso!");
+        queryClient.invalidateQueries("listar_alunos");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message || "Erro ao excluir aluno!");
+      });
   };
 
   const columnsTable = [
     { field: "nome", headerName: "Nome", width: 300 },
-    { field: "codigo", headerName: "Código", width: 150 },
-    { field: "professor", headerName: "Professor", width: 250 },
+    { field: "matricula", headerName: "Matricula", width: 150 },
+    { field: "email", headerName: "E-mail", width: 250 },
     { field: "dataCadastro", headerName: "Data de cadastro", width: 150 },
     {
       field: "actions",
@@ -219,14 +218,14 @@ export function Turmas() {
           icon={<BsFillTrashFill size={18} />}
           label="Deletar"
           onClick={() => {
-            deletarTurma(params.id);
+            deletarAluno(params.id);
           }}
         />,
         <GridActionsCellItem
           icon={<AiFillEdit size={20} />}
           label="Editar"
           onClick={async () => {
-            carregarTurma(params.id);
+            carregarAluno(params.id);
             setOpenEdit(true);
           }}
         />,
@@ -240,16 +239,16 @@ export function Turmas() {
       <Content>
         <DivButtons>
           <Title fontSize={32} fontWeight={600}>
-            Turmas
+            Alunos
           </Title>
-          <PrimaryButton handleClick={handleOpen}>Cadastrar</PrimaryButton>
+          <PrimaryButton handleClick={handleOpen}>CADASTRAR</PrimaryButton>
         </DivButtons>
         <DataTable data={dataTable} columns={columnsTable} />
       </Content>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <FormText>Preencha corretamente os dados cadastrais.</FormText>
-          <Form onSubmit={handleSubmit(cadastrarTurma)}>
+          <Form onSubmit={handleSubmit(cadastrarAlunos)}>
             <TextField
               id="outlined-nome"
               label="Nome"
@@ -259,38 +258,52 @@ export function Turmas() {
               sx={{ width: "100%", background: "#F5F4FF" }}
             />
             <TextField
-              id="outlined-codigo"
-              label="Código da turma"
+              id="outlined-matricula"
+              label="Matricula"
               required={true}
-              {...register("codigo")}
+              {...register("matricula")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+            />
+            <TextField
+              id="outlined-email"
+              label="E-mail"
+              required={true}
+              {...register("email")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+            />
+            <TextField
+              id="outlined-senha"
+              label="Senha"
+              required={true}
+              {...register("senha")}
               sx={{ width: "100%", background: "#F5F4FF" }}
             />
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Professor</InputLabel>
+              <InputLabel id="demo-simple-select-label">Turma</InputLabel>
               <Select
                 id="simple-select-label-turma"
                 labelId="simple-select-turma"
-                label="Professor"
+                label="Turma"
                 defaultValue={""}
                 required={true}
-                {...register("professor")}
+                {...register("turma")}
                 sx={{ width: "100%", background: "#F5F4FF" }}
               >
-                {professores.map((prof, index) => (
-                  <MenuItem value={prof.id} key={index}>
-                    {prof.nome} - {prof.matricula}
+                {turmas.map((turma, index) => (
+                  <MenuItem value={turma.id} key={index}>
+                    {turma.nome}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-            <PrimaryButton>Cadastrar</PrimaryButton>
+            <PrimaryButton>CADASTRAR</PrimaryButton>
           </Form>
         </Box>
       </Modal>
       <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
         <Box sx={style}>
           <FormText>Altere os dados cadastrais.</FormText>
-          <Form onSubmit={handleSubmit(editarTurma)}>
+          <Form onSubmit={handleSubmit(editarAluno)}>
             <TextField
               id="outlined-nome"
               label="Nome"
@@ -299,10 +312,17 @@ export function Turmas() {
               sx={{ width: "100%", background: "#F5F4FF" }}
             />
             <TextField
-              id="outlined-codigo"
-              label="Código"
+              id="outlined-matricula"
+              label="Matricula"
               required={true}
-              {...register("codigoEdit")}
+              {...register("matriculaEdit")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+            />
+            <TextField
+              id="outlined-email"
+              label="E-mail"
+              required={true}
+              {...register("emailEdit")}
               sx={{ width: "100%", background: "#F5F4FF" }}
             />
             <PrimaryButton>Editar</PrimaryButton>

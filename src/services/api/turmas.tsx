@@ -1,4 +1,4 @@
-import { TurmasCadastrarDTO } from "../../pages/Turmas/dtos/TurmasCadastrarDTO";
+import { TurmasCadastrarDTO } from "../../pages/GerenciarTurmas/dtos/TurmasCadastrarDTO";
 import { api } from "./api";
 
 export const cadastrarTurmaApi = async (turma: TurmasCadastrarDTO) => {

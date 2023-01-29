@@ -1,5 +1,5 @@
 // import { ExperimentosCadastrarDTO } from "../../pages/Experimentos/dtos/ExperimentosCadastrarDTO";
-import { ExperimentoCadastrarDTO } from "../../pages/Experimentos/dtos/ExperimentoCadastrarDTO";
+import { ExperimentoCadastrarDTO } from "../../pages/GerenciarExperimentos/dtos/ExperimentoCadastrarDTO";
 import { api } from "./api";
 
 export const cadastrarExperimentoApi = async (
@@ -23,4 +23,8 @@ export const editarExperimentoApi = async (id: string, turma: Object) => {
 
 export const deletarExperimentoApi = async (id: string) => {
   return await api.delete("/experimentos/" + id).then((response) => response);
+};
+
+export const consultarExperimentoApi = async (id: string) => {
+  return await api.get("/experimentos/" + id).then((response) => response);
 };

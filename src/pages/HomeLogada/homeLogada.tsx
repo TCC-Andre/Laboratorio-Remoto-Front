@@ -12,10 +12,11 @@ import {
 } from "@mui/material";
 
 import "react-toastify/dist/ReactToastify.css";
-import { ExperimentosListarDTO } from "../Experimentos/dtos/ExperimentosListarDTO";
+import { ExperimentosListarDTO } from "../GerenciarExperimentos/dtos/ExperimentosListarDTO";
 import { api } from "../../services/api/api";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { arrayBufferToBase64 } from "../../services/utils";
 
 const Container = styled.div`
   width: 100%;
@@ -71,16 +72,6 @@ export function HomeLogada(props: any) {
 
   useQuery("listar_experimentos", listarExperimentos);
 
-  const arrayBufferToBase64 = (buffer: any) => {
-    let binary = "";
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
-  };
-
   return (
     <div>
       <Container>
@@ -124,12 +115,12 @@ export function HomeLogada(props: any) {
                         sx={{ display: "flex", justifyContent: "center" }}
                       >
                         <PrimaryButton
-                          width="150px"
-                          height="45px"
-                          fontSize="16px"
+                          width="130px"
+                          height="40px"
+                          fontSize="14px"
                           handleClick={() => navigate(experimento.id)}
                         >
-                          Acessar
+                          ACESSAR
                         </PrimaryButton>
                       </CardActions>
                     </Card>
