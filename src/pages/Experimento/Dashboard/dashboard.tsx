@@ -1,14 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { Grid, Paper } from "@mui/material";
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   border: none;
   background: ${(props) => props.theme.colors.white};
-  padding: 5%;
 `;
 
 export function Dashboard() {
@@ -16,9 +14,11 @@ export function Dashboard() {
 
   return (
     <Container>
-      <Grid container spacing={2}>
-        <Grid xs={12}>Dashboard do experimento {id}</Grid>
-      </Grid>
+      <iframe
+        src="http://164.41.98.25:443/dashboard/c3a65c80-8c9c-11ed-9d4a-21d2142c9feb?publicId=ba042a80-0322-11ed-9f25-414fbaf2b065"
+        width="100%"
+        height="100%"
+      ></iframe>
     </Container>
   );
 }

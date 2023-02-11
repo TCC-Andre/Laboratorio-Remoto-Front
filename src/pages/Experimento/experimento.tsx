@@ -9,6 +9,7 @@ import Title from "../../shared/components/Title/Title";
 import Text from "../../shared/components/Text/Text";
 import PrimaryButton from "../../shared/components/PrimaryButton/PrimaryButton";
 import { SlCalender } from "react-icons/sl";
+import { useQuery } from "react-query";
 
 const Container = styled.div`
   width: 100%;
@@ -47,15 +48,13 @@ export function Experimento() {
     }
   };
 
-  useEffect(() => {
-    void consultarExperimento();
-  }, [experimento]);
+  useQuery("consultar_experimento", consultarExperimento);
 
   return (
     <Container>
       <Grid container spacing={2}>
         <Grid xs={7}>
-          <Paper sx={{ padding: "5%", minHeight: "400px" }}>
+          <Paper sx={{ padding: "50px", minHeight: "400px" }}>
             <Title fontSize={38} fontWeight={600} marginBottom="20px">
               {experimento?.nome}
             </Title>

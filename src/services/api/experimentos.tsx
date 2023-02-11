@@ -12,19 +12,27 @@ export const cadastrarExperimentoApi = async (
         "Content-Type": "multipart/form-data",
       },
     })
-    .then((response) => response);
+    .then((response) => response)
+    .catch((error) => error.response);
 };
 
 export const editarExperimentoApi = async (id: string, turma: Object) => {
   return await api
     .put("/experimentos/" + id, turma)
-    .then((response) => response);
+    .then((response) => response)
+    .catch((error) => error.response);
 };
 
 export const deletarExperimentoApi = async (id: string) => {
-  return await api.delete("/experimentos/" + id).then((response) => response);
+  return await api
+    .delete("/experimentos/" + id)
+    .then((response) => response)
+    .catch((error) => error.response);
 };
 
 export const consultarExperimentoApi = async (id: string) => {
-  return await api.get("/experimentos/" + id).then((response) => response);
+  return await api
+    .get("/experimentos/" + id)
+    .then((response) => response)
+    .catch((error) => error.response);
 };

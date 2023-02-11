@@ -2,10 +2,11 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import Theme from "./styles/theme";
 import AppRoutes from "./routes";
-import { Navbar } from "./shared/components/Navbar/navbar";
 import { AuthProvider } from "./context/AuthProvider";
 import { ToastContainer } from "react-toastify";
-import { BrowserRouter } from "react-router-dom";
+import "dayjs/locale/pt-br";
+import dayjs from "dayjs";
+dayjs.locale("pt-br");
 
 function App() {
   return (
