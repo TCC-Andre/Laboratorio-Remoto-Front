@@ -5,4 +5,5 @@ export interface ExperimentoCadastrarDTO {
   status: boolean;
   turma: Array<{}>;
   file: FormData;
+  iframe: string;
 }

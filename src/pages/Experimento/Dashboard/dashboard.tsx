@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import { consultarExperimentoApi } from "../../../services/api/experimentos";
+import { useQuery } from "react-query";
+import { ExperimentosConsultarDTO } from "../../GerenciarExperimentos/dtos/ExperimentoConsultarDTO";
+import { CircularProgress } from "@mui/material";
 
 const Container = styled.div`
   width: 100%;
@@ -9,16 +13,48 @@ const Container = styled.div`
   background: ${(props) => props.theme.colors.white};
 `;
 
+const DivLoading = styled.div`
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export function Dashboard() {
   const { id } = useParams();
+  const [experimentos, setExperimentos] = useState<ExperimentosConsultarDTO>();
+  const [loading, setLoading] = useState(true);
+
+  const consultarExperimento = async () => {
+    const response = await consultarExperimentoApi(id!);
+
+    console.log(response.data);
+
+    const experimentos = {
+      id: response.data.id,
+      nome: response.data.nome,
+      descricao: response.data.descricao,
+      duracao: response.data.duracao,
+      status: response.data.status,
+      iframe: response.data.iframe,
+    } as ExperimentosConsultarDTO;
+
+    setLoading(false);
+    setExperimentos(experimentos);
+  };
+
+  useQuery("listar_experimentos", consultarExperimento);
 
   return (
     <Container>
-      <iframe
-        src="http://164.41.98.25:443/dashboard/c3a65c80-8c9c-11ed-9d4a-21d2142c9feb?publicId=ba042a80-0322-11ed-9f25-414fbaf2b065"
-        width="100%"
-        height="100%"
-      ></iframe>
+      {loading ? (
+        <DivLoading>
+          <CircularProgress size={50} sx={{ color: "#153C7A" }} />
+        </DivLoading>
+      ) : (
+        <iframe src={experimentos?.iframe} width="100%" height="100%"></iframe>
+      )}
     </Container>
   );
 }

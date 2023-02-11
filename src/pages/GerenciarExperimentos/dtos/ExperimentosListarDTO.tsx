@@ -6,6 +6,7 @@ export interface ExperimentosListarDTO {
   status: string;
   dataCadastro?: string;
   imagem: Imagem;
+  iframe: string;
 }
 
 interface Imagem {

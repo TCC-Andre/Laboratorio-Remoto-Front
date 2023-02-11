@@ -14,7 +14,6 @@ import {
 
 import "react-toastify/dist/ReactToastify.css";
 import { ExperimentosListarDTO } from "../GerenciarExperimentos/dtos/ExperimentosListarDTO";
-import { api } from "../../services/api/api";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { arrayBufferToBase64 } from "../../services/utils";
@@ -67,6 +66,7 @@ export function HomeLogada(props: any) {
         duracao: value.duracao,
         status: value.status,
         imagem: value.imagem,
+        iframe: value.iframe,
       };
     });
 
@@ -94,7 +94,7 @@ export function HomeLogada(props: any) {
                         <Card
                           key={index}
                           sx={{
-                            maxWidth: 400,
+                            maxWidth: 600,
                             minWidth: 400,
                             paddingBottom: "5px",
                           }}

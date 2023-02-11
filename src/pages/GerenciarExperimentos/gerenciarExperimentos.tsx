@@ -125,6 +125,7 @@ export function GerenciarExperimentos() {
         status: value.status,
         dataCadastro: dayjs(value.dataCadastro).format("DD/MM/YYYY"),
         imagem: value.imagem,
+        iframe: value.iframe,
       })
     );
 
@@ -154,6 +155,7 @@ export function GerenciarExperimentos() {
     formData.append("duracao", experimento.duracao.toString());
     formData.append("status", experimento.status.toString());
     formData.append("turma", JSON.stringify(experimento.turma));
+    formData.append("iframe", experimento.iframe);
 
     const response = await cadastrarExperimentoApi(experimento, formData);
 
@@ -196,6 +198,7 @@ export function GerenciarExperimentos() {
     setValue("descricaoEdit", experimento.descricao);
     setValue("duracaoEdit", experimento.duracao);
     setValue("statusEdit", experimento.status);
+    setValue("iframeEdit", experimento.iframe);
     setOpenEdit(true);
   };
 
@@ -205,6 +208,7 @@ export function GerenciarExperimentos() {
       descricao: data.descricaoEdit,
       duracao: Number(data.duracaoEdit),
       status: data.statusEdit,
+      iframe: data.iframeEdit,
     };
 
     const response = await editarExperimentoApi(
@@ -234,11 +238,12 @@ export function GerenciarExperimentos() {
   };
 
   const columnsTable = [
-    { field: "nome", headerName: "Nome", width: 250 },
-    { field: "descricao", headerName: "Descrição", width: 250 },
-    { field: "duracao", headerName: "Duração (min)", width: 120 },
-    { field: "status", headerName: "Status", width: 100, type: "boolean" },
-    { field: "dataCadastro", headerName: "Data de cadastro", width: 150 },
+    { field: "nome", headerName: "Nome", flex: 2 },
+    { field: "descricao", headerName: "Descrição", flex: 2 },
+    { field: "duracao", headerName: "Duração (min)", flex: 0.7 },
+    { field: "status", headerName: "Status", flex: 0.5, type: "boolean" },
+    { field: "iframe", headerName: "iFrame", flex: 1 },
+    { field: "dataCadastro", headerName: "Data de cadastro", flex: 1 },
     {
       field: "actions",
       type: "actions",
@@ -309,7 +314,13 @@ export function GerenciarExperimentos() {
               sx={{ width: "100%", background: "#F5F4FF" }}
               InputLabelProps={{ shrink: false }}
             />
-
+            <TextField
+              id="outlined-iframe"
+              label="iFrame do experimento"
+              required={true}
+              {...register("iframe")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+            />
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Status</InputLabel>
               <Select
@@ -391,6 +402,13 @@ export function GerenciarExperimentos() {
                 <MenuItem value={false as any}>Desativado</MenuItem>
               </Select>
             </FormControl>
+            <TextField
+              id="outlined-iframe"
+              label="iFrame do experimento"
+              required={true}
+              {...register("iframeEdit")}
+              sx={{ width: "100%", background: "#F5F4FF" }}
+            />
             <PrimaryButton>Editar</PrimaryButton>
           </Form>
         </Box>
