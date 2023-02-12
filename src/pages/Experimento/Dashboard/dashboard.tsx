@@ -67,7 +67,7 @@ export function Dashboard() {
         </DivLoading>
       ) : (
         <>
-          <Timer endDate={dayjs().add(1, "year").format()} />
+          <Timer endTime={"2023-02-12T19:50:00-03:00"} />
           <iframe src={experimento?.iframe} width="100%" height="100%"></iframe>
         </>
       )}
