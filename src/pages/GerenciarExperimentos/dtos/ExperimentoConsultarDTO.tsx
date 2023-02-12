@@ -5,4 +5,5 @@ export interface ExperimentosConsultarDTO {
   duracao: string;
   status: string;
   iframe: string;
+  dataCadastro: string;
 }

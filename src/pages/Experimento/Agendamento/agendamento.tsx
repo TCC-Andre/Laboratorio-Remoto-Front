@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Paper } from "@mui/material";
 import Title from "../../../shared/components/Title/Title";
 import Text from "../../../shared/components/Text/Text";
@@ -13,7 +13,8 @@ import {
 import { AgendamentoCadastrarDTO } from "./dtos/AgendamentoCadastrar.dto";
 import { AuthContext } from "../../../context/AuthProvider";
 import { toast } from "react-toastify";
-import { queryClient } from "../../../services/queryClient";
+import { useQuery } from "react-query";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const Container = styled.div`
   width: 100%;
@@ -92,10 +93,11 @@ const data = [
 export function Agendamento() {
   const { id } = useParams();
   const [itemActive, setItemActive] = React.useState("dia1");
-  const [dataAtual, setDataAtual] = useState("");
+  const [dataAtual, setDataAtual] = useState(dayjs().format());
   const [horarios, setHorarios] = useState([]);
   const [horaSelecionada, setHoraSelecionada] = useState("");
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const consultarHorariosAgendamento = async (data: string) => {
     const payload = {
@@ -111,9 +113,7 @@ export function Agendamento() {
   };
 
   useEffect(() => {
-    const data = dayjs().format();
-    setDataAtual(data);
-    void consultarHorariosAgendamento(data);
+    void consultarHorariosAgendamento(dataAtual);
   }, []);
 
   const cadastrarAgendamento = async () => {
@@ -146,12 +146,28 @@ export function Agendamento() {
     void consultarHorariosAgendamento(dayjs(data).format());
   };
 
+  const handleRetorna = () => {
+    const path = "/experimentos/" + id;
+    navigate(path);
+  };
+
   return (
     <Container>
       <Grid container spacing={2}>
         <Grid xs={12}>
           <Paper sx={{ padding: "50px", minHeight: "400px" }}>
-            <Title fontSize={38} fontWeight={600} marginBottom="20px">
+            <AiOutlineArrowLeft
+              size={35}
+              onClick={handleRetorna}
+              cursor="pointer"
+              color="#153C7A"
+            />
+            <Title
+              fontSize={38}
+              fontWeight={600}
+              marginBottom="20px"
+              marginTop="20px"
+            >
               Agendamento
             </Title>
             <Text fontSize={18} fontWeight={500}>
