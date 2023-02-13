@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { consultarExperimentoApi } from "../../services/api/experimentos";
@@ -10,6 +10,11 @@ import Text from "../../shared/components/Text/Text";
 import PrimaryButton from "../../shared/components/PrimaryButton/PrimaryButton";
 import { SlCalender } from "react-icons/sl";
 import { useQuery } from "react-query";
+import dayjs from "dayjs";
+import { consultarExisteAgendamentoApi } from "../../services/api/agendamento";
+import { ExisteAgendamentoDTO } from "./Agendamento/dtos/ExisteAgendamento.dto";
+import { toast } from "react-toastify";
+import { AuthContext } from "../../context/AuthProvider";
 
 const Container = styled.div`
   width: 100%;
@@ -39,6 +44,7 @@ export function Experimento() {
     null
   );
   const navigate = useNavigate();
+  const auth = useContext(AuthContext);
 
   const consultarExperimento = async () => {
     const response = await consultarExperimentoApi(id!);
@@ -50,6 +56,33 @@ export function Experimento() {
 
   useQuery("consultar_experimento", consultarExperimento);
 
+  const consultarExisteAgendamento = async () => {
+    const payload = {
+      data: dayjs().format("YYYY-MM-DDTHH:mm:ss"),
+      experimentoId: id!,
+    };
+
+    const response = await consultarExisteAgendamentoApi(payload);
+
+    return response;
+  };
+
+  const handleAcessarExperimento = async () => {
+    const response = await consultarExisteAgendamento();
+
+    if (response.status === 201) {
+      const id = response.data.aluno.id;
+      if (id === auth.user?.id) {
+        navigate("dashboard");
+      } else {
+        toast.error("Existe um aluno agendamento para este experimento!");
+      }
+    }
+    if (response.status === 200) {
+      navigate("dashboard");
+    }
+  };
+
   return (
     <Container>
       <Grid container spacing={2}>
@@ -60,7 +93,7 @@ export function Experimento() {
             </Title>
             <DivButton>
               <PrimaryButton
-                handleClick={() => navigate("dashboard")}
+                handleClick={handleAcessarExperimento}
                 width="120px"
                 height="40px"
                 fontSize="14px"

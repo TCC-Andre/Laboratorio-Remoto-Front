@@ -15,3 +15,13 @@ export const cadastrarAgendamentoApi = async (
     .then((response) => response)
     .catch((error) => error.response);
 };
+
+export const consultarExisteAgendamentoApi = async (payload: {
+  data: string;
+  experimentoId: string;
+}) => {
+  return await api
+    .post("/agendamentos/existe-agendamento", payload)
+    .then((response) => response)
+    .catch((error) => error.response);
+};

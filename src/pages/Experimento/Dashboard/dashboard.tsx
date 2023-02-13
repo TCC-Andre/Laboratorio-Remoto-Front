@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { consultarExperimentoApi } from "../../../services/api/experimentos";
@@ -8,6 +8,8 @@ import { CircularProgress } from "@mui/material";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import Timer from "../../../shared/components/Timer/timer";
+import { consultarExisteAgendamentoApi } from "../../../services/api/agendamento";
+import { ExisteAgendamentoDTO } from "../Agendamento/dtos/ExisteAgendamento.dto";
 dayjs.extend(duration);
 
 const Container = styled.div`
@@ -15,16 +17,6 @@ const Container = styled.div`
   height: 100vh;
   border: none;
   background: ${(props) => props.theme.colors.white};
-`;
-
-const DivNav = styled.div`
-  width: 100%;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 50px;
-  background-color: #153c7a;
 `;
 
 const DivLoading = styled.div`
@@ -39,6 +31,7 @@ export function Dashboard() {
   const { id } = useParams();
   const [experimento, setExperimento] = useState<ExperimentosConsultarDTO>();
   const [loading, setLoading] = useState(true);
+  const [agendamento, setAgendamento] = useState("");
 
   const consultarExperimento = async () => {
     const response = await consultarExperimentoApi(id!);
@@ -57,6 +50,20 @@ export function Dashboard() {
     setExperimento(experimento);
   };
 
+  const consultarExisteAgendamento = async () => {
+    const payload = {
+      data: dayjs().format(),
+      experimentoId: id!,
+    };
+
+    const response = await consultarExisteAgendamentoApi(payload);
+
+    if (response.status === 200) {
+      setAgendamento(response.data.horarioFinal);
+    }
+  };
+
+  useQuery("consultar_agendamento", consultarExisteAgendamento);
   useQuery("listar_experimentos", consultarExperimento);
 
   return (
@@ -67,7 +74,7 @@ export function Dashboard() {
         </DivLoading>
       ) : (
         <>
-          <Timer endTime={"2023-02-12T19:50:00-03:00"} />
+          <Timer endTime={agendamento} />
           <iframe src={experimento?.iframe} width="100%" height="100%"></iframe>
         </>
       )}
