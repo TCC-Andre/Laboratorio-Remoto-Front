@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { arrayBufferToBase64 } from "../../services/utils";
 import { consultarExperimentosPorAlunoApi } from "../../services/api/aluno";
 import { AuthContext } from "../../context/AuthProvider";
+import { listarExperimentosApi } from "../../services/api/experimentos";
 
 const Container = styled.div`
   width: 100%;
@@ -56,22 +57,41 @@ export function HomeLogada(props: any) {
   const auth = useContext(AuthContext);
 
   const listarExperimentos = async () => {
-    const response = await consultarExperimentosPorAlunoApi(auth.user?.id!);
+    if (auth.user?.isAdmin === true) {
+      const response = await listarExperimentosApi(auth.user?.id!);
 
-    const experimentos = response.data.map((value: ExperimentosListarDTO) => {
-      return {
-        id: value.id,
-        nome: value.nome,
-        descricao: value.descricao,
-        duracao: value.duracao,
-        status: value.status,
-        imagem: value.imagem,
-        iframe: value.iframe,
-      };
-    });
+      const experimentos = response.data.map((value: ExperimentosListarDTO) => {
+        return {
+          id: value.id,
+          nome: value.nome,
+          descricao: value.descricao,
+          duracao: value.duracao,
+          status: value.status,
+          imagem: value.imagem,
+          iframe: value.iframe,
+        };
+      });
 
-    setLoading(false);
-    setExperimentos(experimentos);
+      setLoading(false);
+      setExperimentos(experimentos);
+    } else {
+      const response = await consultarExperimentosPorAlunoApi(auth.user?.id!);
+
+      const experimentos = response.data.map((value: ExperimentosListarDTO) => {
+        return {
+          id: value.id,
+          nome: value.nome,
+          descricao: value.descricao,
+          duracao: value.duracao,
+          status: value.status,
+          imagem: value.imagem,
+          iframe: value.iframe,
+        };
+      });
+
+      setLoading(false);
+      setExperimentos(experimentos);
+    }
   };
 
   useQuery("listar_experimentos", listarExperimentos);

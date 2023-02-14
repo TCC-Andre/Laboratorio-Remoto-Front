@@ -36,3 +36,10 @@ export const consultarExperimentoApi = async (id: string) => {
     .then((response) => response)
     .catch((error) => error.response);
 };
+
+export const listarExperimentosApi = async (id: string) => {
+  return await api
+    .get("/experimentos/")
+    .then((response) => response)
+    .catch((error) => error.response);
+};

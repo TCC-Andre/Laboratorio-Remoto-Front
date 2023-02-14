@@ -100,18 +100,20 @@ export function Experimento() {
               >
                 ACESSAR
               </PrimaryButton>
-              <Button
-                onClick={() => navigate("agendamento")}
-                variant="contained"
-                endIcon={<SlCalender color="#ffbb18" />}
-                sx={{
-                  borderRadius: "12px",
-                  background: "#153C7A",
-                  width: "140px",
-                }}
-              >
-                Agendar
-              </Button>
+              {!auth.user?.isAdmin && (
+                <Button
+                  onClick={() => navigate("agendamento")}
+                  variant="contained"
+                  endIcon={<SlCalender color="#ffbb18" />}
+                  sx={{
+                    borderRadius: "12px",
+                    background: "#153C7A",
+                    width: "140px",
+                  }}
+                >
+                  Agendar
+                </Button>
+              )}
             </DivButton>
             <DivInline>
               <Text fontSize={18} fontWeight={800}>
